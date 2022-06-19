@@ -1,0 +1,76 @@
+<ng-container *ngIf="!isMobile; else mobileLayout">
+    <div class="content">
+        <mat-divider [vertical]="true"></mat-divider>
+        <div class="col col-left">
+            <div class="section">
+                <h2 class="title">
+                    <ng-container *ngTemplateOutlet="asideUpTitle"></ng-container>
+                </h2>
+                <div class="section-content">
+                    <ng-container *ngTemplateOutlet="asideUpContent"></ng-container>
+                </div>
+            </div>
+            <div class="section">
+                <h2 class="title">
+                    <ng-container *ngTemplateOutlet="asideDownTitle"></ng-container>
+                </h2>
+                <div class="section-content">
+                    <ng-container *ngTemplateOutlet="asideDownContent"></ng-container>
+                </div>
+            </div>
+        </div>
+        <mat-divider [vertical]="true"></mat-divider>
+        <div class="col col-right">
+            <div class="main">
+                <h2 class="title">
+                    <ng-container *ngTemplateOutlet="mainTitle"></ng-container>
+                </h2>
+                <div class="main-content">
+                    <ng-container *ngTemplateOutlet="mainContent"></ng-container>
+                </div>
+            </div>
+        </div>
+        <mat-divider [vertical]="true"></mat-divider>
+    </div>
+</ng-container>
+<ng-template #mobileLayout>
+    <mat-tab-group dynamicHeight mat-align-tabs="center" class="col">
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <ng-container *ngTemplateOutlet="asideUpTitle"></ng-container>
+            </ng-template>
+            <ng-container *ngTemplateOutlet="asideUpContent"></ng-container>
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <ng-container *ngTemplateOutlet="mainTitle"></ng-container>
+            </ng-template>
+            <ng-container *ngTemplateOutlet="mainContent"></ng-container>
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <ng-container *ngTemplateOutlet="asideDownTitle"></ng-container>
+            </ng-template>
+            <ng-container *ngTemplateOutlet="asideDownContent"></ng-container>
+        </mat-tab>
+    </mat-tab-group>
+</ng-template>
+
+<ng-template #asideUpTitle>
+    <ng-content select="[aside-up-title]"></ng-content>
+</ng-template>
+<ng-template #asideDownTitle>
+    <ng-content select="[aside-down-title]"></ng-content>
+</ng-template>
+<ng-template #mainTitle>
+    <ng-content select="[main-title]"></ng-content>
+</ng-template>
+<ng-template #asideUpContent>
+    <ng-content select="[aside-up-content]"></ng-content>
+</ng-template>
+<ng-template #asideDownContent>
+    <ng-content select="[aside-down-content]"></ng-content>
+</ng-template>
+<ng-template #mainContent>
+    <ng-content select="[main-content]"></ng-content>
+</ng-template>

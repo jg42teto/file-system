@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>{{ input.title }}</h1>
+<form (submit)="onOkClick()">
+    <div mat-dialog-content>
+        <p *ngIf="input.accept_text"> {{ input.accept_text }} </p>
+
+        <mat-form-field appearance="fill" *ngIf="input.text !== undefined">
+            <mat-label>{{ input.text_label }}</mat-label>
+            <input matInput [(ngModel)]="output.text" [ngModelOptions]="{standalone: true}" [value]="input.text"
+                cdkFocusInitial>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" *ngIf="input.options !== undefined">
+            <mat-label>{{ input.options_label }}</mat-label>
+            <mat-select [(value)]="output.option">
+                <mat-option *ngFor="let opt of input.options" [value]="opt" cdkFocusInitial>{{ opt }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</form>
+<div mat-dialog-actions align="center">
+    <button mat-raised-button color="primary" (click)="onOkClick()">Ok</button>
+    <button mat-button (click)="onCloseClick()">Close</button>
+</div>

@@ -1,0 +1,38 @@
+
+@use "~@angular/material/theming" as t;
+@use "src/vars";
+
+$total-content-height: calc(100vh - 4rem); // screen - toolbar
+$title-height: 3rem;
+
+.content {
+    display: flex;
+}
+
+.col-left {
+    width: 30%
+}
+
+.col-right {
+    width: 70%
+}
+
+.title {
+    top: 0;
+    margin: 0 !important;
+    height: $title-height;
+    line-height: $title-height;
+    text-align: center;
+    background-color: t.mat-color(vars.$primary-palette, lighter) !important;
+    color: t.mat-color(vars.$primary-palette, lighter-contrast) !important;
+}
+
+.section-content {
+    height: calc($total-content-height / 2 - $title-height);
+    overflow-y: auto;
+}
+
+.main-content {
+    height: calc($total-content-height - $title-height);
+    overflow-y: auto;
+}

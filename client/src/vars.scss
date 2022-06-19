@@ -1,0 +1,9 @@
+@use "sass:map";
+@use "~@angular/material/theming" as t;
+
+$primary-palette:   t.mat-palette(t.$mat-indigo);
+$accent-palette:    t.mat-palette(t.$mat-orange, A200, A100, A400);
+$warn-palette:      t.mat-palette(t.$mat-red);
+$theme:             t.mat-light-theme($primary-palette, $accent-palette, $warn-palette);
+$foreground-palette: map-get($theme, foreground);
+$background-palette: map-get($theme, background);

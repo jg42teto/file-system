@@ -1,0 +1,4 @@
+@use "~@angular/material/theming" as t;
+@use "vars";
+@include t.mat-core();
+@include t.angular-material-theme(vars.$theme);

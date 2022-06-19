@@ -1,0 +1,143 @@
+<app-layout>
+    <ng-container ngProjectAs="[aside-up-title]">Disks</ng-container>
+    <ng-container ngProjectAs="[aside-up-content]">
+        <mat-selection-list (selectionChange)="diskChange($event)" [multiple]="false" [color]="'primary'">
+            <mat-list-option [value]="disk" *ngFor="let disk of disks; last as last" mat-list-item>
+                <mat-icon mat-list-icon [color]="disk == activeDisk && 'accent'">storage</mat-icon>
+                <span mat-line>{{ disk.name }}</span>
+                <span mat-line class="secondary">{{disk.db}}</span>
+                <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+            </mat-list-option>
+        </mat-selection-list>
+    </ng-container>
+
+    <ng-container ngProjectAs="[aside-down-title]">Actions</ng-container>
+    <ng-container ngProjectAs="[aside-down-content]">
+        <mat-action-list class="actions-list">
+            <ng-container *ngIf="clipboardObject">
+                <button mat-list-item (click)="objectPaste()">
+                    <mat-icon mat-list-icon>content_paste</mat-icon>
+                    <span mat-line>Paste</span>
+                </button>
+                <mat-divider></mat-divider>
+                <button mat-list-item (click)="closeClipboard()">
+                    <mat-icon mat-list-icon>close</mat-icon>
+                    <span mat-line>Close</span>
+                </button>
+            </ng-container>
+            <ng-container *ngIf="!clipboardObject && activeDisk">
+                <button mat-list-item (click)="fileUpload()">
+                    <mat-icon mat-list-icon>upload</mat-icon>
+                    <span mat-line>Upload File</span>
+                </button>
+                <mat-divider></mat-divider>
+                <button mat-list-item (click)="folderNew()">
+                    <mat-icon mat-list-icon>create_new_folder</mat-icon>
+                    <span mat-line>New Folder</span>
+                </button>
+                <mat-divider></mat-divider>
+                <button mat-list-item (click)="diskRename()">
+                    <mat-icon mat-list-icon>edit</mat-icon>
+                    <span mat-line>Rename Disk</span>
+                </button>
+                <mat-divider></mat-divider>
+                <button mat-list-item (click)="thrashedAction()">
+                    <mat-icon mat-list-icon>delete</mat-icon>
+                    <span mat-line>Trashed</span>
+                </button>
+                <mat-divider></mat-divider>
+                <button mat-list-item (click)="diskDelete()">
+                    <mat-icon mat-list-icon color="warn">clear</mat-icon>
+                    <span mat-line class="danger">Delete Disk</span>
+                </button>
+                <mat-divider></mat-divider>
+            </ng-container>
+            <ng-container *ngIf="!clipboardObject">
+                <button mat-list-item (click)="diskNew()">
+                    <mat-icon mat-list-icon>add</mat-icon>
+                    <span mat-line>New Disk</span>
+                </button>
+            </ng-container>
+        </mat-action-list>
+    </ng-container>
+
+    <ng-container ngProjectAs="[main-title]">Files & Folders</ng-container>
+    <ng-container ngProjectAs="[main-content]">
+        <ng-container *ngIf="activeDisk">
+            <div class="folder-history-list">
+                <button *ngIf="activeDisk" mat-button class="folder-history-item" (click)="diskAction()">
+                    {{ activeDisk.name }}
+                </button>
+                <ng-container *ngFor=" let folder of folderHistory">
+                    <div class="folder-history-separator"></div>
+                    <button mat-button class="folder-history-item" (click)="folderAction(folder)">
+                        {{ folder.name }}
+                    </button>
+                </ng-container>
+                <ng-container *ngIf="activeTrashed">
+                    <div class="folder-history-separator"></div>
+                    <button mat-button class="folder-history-item" (click)="thrashedAction()">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </ng-container>
+            </div>
+            <mat-divider></mat-divider>
+            <mat-action-list>
+                <ng-container
+                    *ngFor="let fso_group of [activeFolderContent?.folders, activeFolderContent?.files]; last as last1">
+                    <ng-container *ngFor="let fso of $any(fso_group); last as last2">
+                        <button mat-list-item class="fso" [disableRipple]="this.activeTrashed"
+                            (click)="fileObjectAction(fso)" [ngClass]="{selected: clipboardObject == fso}">
+                            <mat-icon *ngIf="fso.kind == 'fold'; else fileIcon" mat-list-icon>folder</mat-icon>
+                            <ng-template #fileIcon>
+                                <mat-icon mat-list-icon>insert_drive_file</mat-icon>
+                            </ng-template>
+                            <div mat-line>{{ fso.name }}</div>
+                            <div mat-line class="secondary">{{ fso.create_dt | date:'yyyy-MM-dd hh:mm:ss'
+                                }}&emsp;|&emsp;{{
+                                fso.size | byteSize }}
+                            </div>
+                            <div mat-line class="secondary" *ngIf="fso.kind == 'fold'">
+                                files: {{ $any(fso).children_files_number || 0
+                                }}&emsp;|&emsp;total files: {{
+                                $any(fso).total_files_number || 0
+                                }}</div>
+                            <div class="fso-menu">
+                                <button mat-icon-button app-click-stop-propagation [matMenuTriggerFor]="fsoMenu">
+                                    <mat-icon>more_vert</mat-icon>
+                                </button>
+                            </div>
+                        </button>
+                        <mat-divider *ngIf="!last1 || !last2"></mat-divider>
+                        <mat-menu #fsoMenu="matMenu">
+                            <ng-container *ngIf="!activeTrashed">
+                                <button mat-menu-item (click)="objectMove(fso)">
+                                    <mat-icon>drive_file_move</mat-icon>
+                                    <span>Move</span>
+                                </button>
+                                <button mat-menu-item (click)="objectRename(fso)">
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Rename</span>
+                                </button>
+                                <button mat-menu-item *ngIf="fso.kind == 'file'" (click)="fileDownload(fso)">
+                                    <mat-icon>download</mat-icon>
+                                    <span>Download</span>
+                                </button>
+                                <button mat-menu-item (click)="objectDelete(fso)">
+                                    <mat-icon color="warn">delete</mat-icon>
+                                    <span class="danger">Delete</span>
+                                </button>
+                            </ng-container>
+                            <ng-container *ngIf="activeTrashed">
+                                <button mat-menu-item (click)="objectRecover(fso)">
+                                    <mat-icon>restore_from_trash</mat-icon>
+                                    <span>Recover</span>
+                                </button>
+                            </ng-container>
+                        </mat-menu>
+                    </ng-container>
+                </ng-container>
+            </mat-action-list>
+        </ng-container>
+    </ng-container>
+</app-layout>

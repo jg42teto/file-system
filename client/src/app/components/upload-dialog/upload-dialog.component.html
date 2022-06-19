@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>Upload File</h1>
+<div mat-dialog-content>
+    <p>Select one file to upload.</p>
+    <mat-form-field appearance="fill">
+        <mat-label>File path</mat-label>
+        <ngx-mat-file-input [formControl]="fileControl" [multiple]="true" color="primary">
+        </ngx-mat-file-input>
+    </mat-form-field>
+    <mat-progress-bar *ngIf="progress !== undefined" mode="determinate" [value]="progress"></mat-progress-bar>
+</div>
+<div mat-dialog-actions align="center">
+    <button mat-raised-button [disabled]="!currentFile" color="primary" (click)="onOkClick()">Upload</button>
+    <button mat-button (click)="onCloseClick()">Close</button>
+</div>

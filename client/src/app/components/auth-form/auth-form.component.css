@@ -1,0 +1,23 @@
+mat-form-field {
+    display: block;
+}
+
+.auth-card {
+    margin-top: 6rem;
+    padding: 2rem !important;
+}
+
+@media (min-width: 600px) {
+    .auth-card {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 500px !important;
+    }
+}
+
+@media (max-width: 599px) {
+    .auth-card {
+        border: 0 !important;
+        box-shadow: none !important;
+    }    
+}

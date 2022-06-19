@@ -1,0 +1,48 @@
+@use "~@angular/material/theming" as t;
+@use "src/vars";
+
+.folder-history-list {
+    overflow: auto;
+    white-space: nowrap;
+
+}
+
+.folder-history-item {
+    font-weight: 200 !important;
+}
+
+.folder-history-separator {
+    display: inline-block;
+    height: 50%;
+    border-right-color: t.mat-color(vars.$foreground-palette, divider);
+    border-right-width: 1px;
+    border-right-style: solid;
+}
+
+.folder-history-separator:after {
+    content: '\200b';
+}
+
+.mat-list-base {
+    padding: 0 !important;
+}
+
+.fso-menu {
+    margin-left: auto !important;
+}
+
+.danger {
+    color: t.mat-color(vars.$warn-palette) !important;
+}
+
+.secondary {
+    color: t.mat-color(vars.$foreground-palette, secondary-text)
+}
+
+.selected {
+    background-color: t.mat-color(vars.$accent-palette, lighter) !important;
+}
+
+.selected:hover {
+    background-color: t.mat-color(vars.$accent-palette, default) !important;
+}
